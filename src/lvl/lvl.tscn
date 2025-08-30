@@ -1,0 +1,217 @@
+[gd_scene load_steps=18 format=3 uid="uid://rm7cgsfgw6v4"]
+
+[ext_resource type="Script" uid="uid://beoveytpnsya2" path="res://src/lvl/Lvl.cs" id="1_vt5go"]
+[ext_resource type="Texture2D" uid="uid://bsfhnttn7ppq2" path="res://img/lvl/white.png" id="2_0kghk"]
+[ext_resource type="Texture2D" uid="uid://bcid1i350j2e4" path="res://img/lvl/lvlBg.png" id="2_rceeu"]
+[ext_resource type="Texture2D" uid="uid://ccj22jdawgem" path="res://img/lvl/snow.png" id="3_57np4"]
+[ext_resource type="Texture2D" uid="uid://syvp2nm57jh4" path="res://img/lvl/textInput.png" id="3_fgkma"]
+[ext_resource type="Texture2D" uid="uid://sa7pucbpbryk" path="res://img/lvl/enm.png" id="4_7vamr"]
+[ext_resource type="Texture2D" uid="uid://c702qrlly2lec" path="res://img/lvl/Bench.png" id="4_jaqkr"]
+[ext_resource type="Texture2D" uid="uid://b2y2bns5eotpe" path="res://img/lvl/x.png" id="4_ptxp2"]
+[ext_resource type="Texture2D" uid="uid://dmivrb4ti668" path="res://img/lvl/calm_player.png" id="5_o46ed"]
+[ext_resource type="Texture2D" uid="uid://d3upgm2jtu1wd" path="res://img/lvl/enm arm.png" id="5_s8rvr"]
+[ext_resource type="Texture2D" uid="uid://belb2wgjawxoe" path="res://img/lvl/red.png" id="5_txm1s"]
+[ext_resource type="Texture2D" uid="uid://miumyl5th202" path="res://img/lvl/chill_guy.png" id="6_p2w7f"]
+[ext_resource type="Texture2D" uid="uid://dspwbi68aemb6" path="res://img/lvl/sword.png" id="6_s8rvr"]
+[ext_resource type="Texture2D" uid="uid://hke5gnepo4jv" path="res://img/lvl/heart.png" id="6_txm1s"]
+[ext_resource type="Texture2D" uid="uid://c8esmmb017os5" path="res://img/lvl/player.png" id="7_4qset"]
+[ext_resource type="Texture2D" uid="uid://bs0awa8rf46c" path="res://img/lvl/Shurikan.png" id="8_rkxq4"]
+[ext_resource type="Texture2D" uid="uid://dd1kpxcm3yopu" path="res://img/lvl/typeBox.png" id="17_o46ed"]
+
+[node name="lvl" type="Node2D"]
+script = ExtResource("1_vt5go")
+
+[node name="White" type="Sprite2D" parent="."]
+position = Vector2(1280, 995)
+scale = Vector2(2559.75, 891)
+texture = ExtResource("2_0kghk")
+
+[node name="Snow" type="Sprite2D" parent="."]
+position = Vector2(1280, 1180)
+texture = ExtResource("3_57np4")
+
+[node name="noTimerSet" type="Node2D" parent="."]
+visible = false
+
+[node name="Bench" type="Sprite2D" parent="noTimerSet"]
+position = Vector2(1231, 1140)
+texture = ExtResource("4_jaqkr")
+
+[node name="CalmPlayer" type="Sprite2D" parent="noTimerSet"]
+position = Vector2(1091, 1018)
+texture = ExtResource("5_o46ed")
+
+[node name="ChillGuy" type="Sprite2D" parent="noTimerSet"]
+position = Vector2(1277, 1079)
+texture = ExtResource("6_p2w7f")
+
+[node name="Sword" type="Sprite2D" parent="noTimerSet"]
+position = Vector2(1198, 1170)
+rotation = -1.31598
+texture = ExtResource("6_s8rvr")
+
+[node name="timerSet" type="Node2D" parent="."]
+
+[node name="Enm" type="Sprite2D" parent="timerSet"]
+position = Vector2(2114, 1014)
+texture = ExtResource("4_7vamr")
+
+[node name="EnmArm" type="Sprite2D" parent="timerSet"]
+position = Vector2(2106, 943)
+rotation = 0.523599
+texture = ExtResource("5_s8rvr")
+centered = false
+offset = Vector2(-184.06, -26.615)
+
+[node name="Sword" type="Sprite2D" parent="timerSet"]
+position = Vector2(338, 1102)
+texture = ExtResource("6_s8rvr")
+
+[node name="Player" type="Sprite2D" parent="timerSet"]
+position = Vector2(441, 1083)
+texture = ExtResource("7_4qset")
+
+[node name="Shurikan" type="Sprite2D" parent="timerSet"]
+position = Vector2(1882, 897)
+texture = ExtResource("8_rkxq4")
+
+[node name="textBg" type="Sprite2D" parent="."]
+texture = ExtResource("2_rceeu")
+centered = false
+
+[node name="textInputBg" type="Sprite2D" parent="."]
+position = Vector2(1280, 504)
+texture = ExtResource("3_fgkma")
+
+[node name="DefTxt" type="Label" parent="."]
+offset_left = 1895.0
+offset_top = 36.0
+offset_right = 2492.0
+offset_bottom = 105.0
+theme_override_font_sizes/font_size = 50
+text = "Definitions"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="defBox" type="Label" parent="."]
+offset_left = 1895.0
+offset_top = 94.0
+offset_right = 2492.0
+offset_bottom = 548.0
+theme_override_font_sizes/font_size = 50
+horizontal_alignment = 1
+
+[node name="inputBox" type="Label" parent="."]
+offset_left = 781.0
+offset_top = 454.0
+offset_right = 1779.0
+offset_bottom = 557.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 75
+horizontal_alignment = 1
+
+[node name="IncorrectStuff" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 23.0
+offset_right = 40.0
+offset_bottom = 63.0
+
+[node name="X" type="Sprite2D" parent="IncorrectStuff"]
+position = Vector2(388, 146)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("4_ptxp2")
+
+[node name="PrevAnswer" type="Label" parent="IncorrectStuff"]
+layout_mode = 0
+offset_left = 91.0
+offset_top = 266.0
+offset_right = 683.0
+offset_bottom = 335.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "text"
+horizontal_alignment = 1
+
+[node name="PrevAnswerWas" type="Label" parent="IncorrectStuff"]
+layout_mode = 0
+offset_left = 91.0
+offset_top = 207.0
+offset_right = 683.0
+offset_bottom = 276.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "Previous Answer Was"
+horizontal_alignment = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="IncorrectStuff"]
+position = Vector2(387.375, 266)
+scale = Vector2(0.597011, 0.00431038)
+texture = ExtResource("5_txm1s")
+
+[node name="UserPrevAnswer" type="Label" parent="IncorrectStuff"]
+layout_mode = 0
+offset_left = 91.0
+offset_top = 398.0
+offset_right = 683.0
+offset_bottom = 467.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "text"
+horizontal_alignment = 1
+
+[node name="UserAnswerWas" type="Label" parent="IncorrectStuff"]
+layout_mode = 0
+offset_left = 91.0
+offset_top = 340.0
+offset_right = 683.0
+offset_bottom = 409.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "You Put"
+horizontal_alignment = 1
+
+[node name="Sprite2D2" type="Sprite2D" parent="IncorrectStuff"]
+position = Vector2(386, 398)
+scale = Vector2(0.218, 0.004)
+texture = ExtResource("5_txm1s")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="timerBox" type="Sprite2D" parent="."]
+position = Vector2(780, 557)
+scale = Vector2(1.17292, 0.0283251)
+texture = ExtResource("5_txm1s")
+centered = false
+
+[node name="Heart" type="Sprite2D" parent="."]
+position = Vector2(2487, 515)
+scale = Vector2(0.290625, 0.290625)
+texture = ExtResource("6_txm1s")
+
+[node name="Heart2" type="Sprite2D" parent="."]
+position = Vector2(2400, 515)
+scale = Vector2(0.290625, 0.290625)
+texture = ExtResource("6_txm1s")
+
+[node name="Heart3" type="Sprite2D" parent="."]
+position = Vector2(2313, 515)
+scale = Vector2(0.290625, 0.290625)
+texture = ExtResource("6_txm1s")
+
+[node name="tags" type="Node2D" parent="."]
+
+[node name="TypeBox" type="Sprite2D" parent="tags"]
+visible = false
+position = Vector2(1280, 420)
+texture = ExtResource("17_o46ed")
+
+[node name="type" type="RichTextLabel" parent="tags/TypeBox"]
+offset_left = -147.0
+offset_top = -31.0
+offset_right = 147.0
+offset_bottom = 31.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 30
+horizontal_alignment = 1
+vertical_alignment = 1

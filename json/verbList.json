@@ -1,0 +1,59 @@
+{
+  "Irregular": [
+    "来[く]る{to come}",
+    "する{to do}",
+    "行[い]く{to go}",
+    "ある{to be (inanimate)}"
+  ],
+  "CommonIrrGodan": [
+    "入[はい]る{to enter}",
+    "走[はし]る{to run}",
+    "いる{to need}",
+    "帰[かえ]る{to return/to come home}",
+    "限[かぎ]る{to limit/to restrict}",
+    "切[き]る{to cut}",
+    "喋[しゃべ]る{to talk, to chat, to chatter}",
+    "知[し]る{to know}",
+    "蹴[け]る{to kick}",
+    "滑[すべ]る{to slide}"
+  ],
+  "IrregularGodan": [
+    "入[はい]る{to enter}",
+    "走[はし]る{to run}",
+    "限[かぎ]る{to limit/to restrict}",
+    "毟[むし]る{to pluck/to pick}",
+    "愚[ぐ]痴[ち]る{to grumple/to complain}",
+    "握[にぎ]る{to grip/to grasp}",
+    "陥[おちい]る{to fall into}",
+    "滅[め]入[い]る{to feel depressed}",
+    "捻[ねじ]る{to screw/to twist}",
+    "罵[ののし]る{to abuse/to curse at}",
+    "野[や]次[じ]る{to jeer at/to catcall/to hackle}",
+    "焦[あせ]る{to be in a hurry}",
+    "火[ほ]照[て]る{to feel hot/to flush}",
+    "帰[かえ]る{to return/to come home}"
+  ],
+  "Godan": [
+    "聞[き]く{to listen; to ask}",
+    "書[か]く{to write}",
+    "話[はな]す{to speak}",
+    "待[ま]つ{to wait}",
+    "会[あ]う{to meet}",
+    "飲[の]む{to drink}",
+    "読[よ]む{to read}",
+    "遊[あそ]ぶ{to play; to hang out}",
+    "死[し]ぬ{to die}"
+  ],
+  "Ichidan": [
+    "食[た]べる{to eat}",
+    "見[み]る{to see/to watch}",
+    "寝[ね]る{to sleep}",
+    "起[お]きる{to get up}",
+    "教[おし]える{to teach/to tell}",
+    "見[み]せる{to show}",
+    "出[で]る{to leave/to go out}",
+    "開[あ]ける{to open (something)}",
+    "閉[し]める{to close (something)}",
+    "忘[わす]れる{to forget}"
+  ]
+}

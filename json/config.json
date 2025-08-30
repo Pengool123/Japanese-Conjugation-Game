@@ -1,0 +1,13 @@
+{
+  "Data": {
+    "MaxLvlVerb": 1,
+    "MaxLvlAdj": 1,
+    "WasInOptions": false
+  },
+  "Settings": {
+    "Minigames": false,
+    "OnlyIrrGo": true,
+    "TimerStatus": true,
+    "TimerTime": 10
+  }
+}

@@ -1,0 +1,121 @@
+[gd_scene load_steps=13 format=3 uid="uid://chhh7cp3srrt1"]
+
+[ext_resource type="Script" uid="uid://qc7gj0qubrjg" path="res://src/lvl_menu/LvlMenu.cs" id="1_a1hbb"]
+[ext_resource type="Texture2D" uid="uid://bdewr8f8w5u0n" path="res://img/lvl_menu/lvlPickBg.png" id="2_ukrfy"]
+[ext_resource type="Texture2D" uid="uid://blrnjyd85mak" path="res://img/buttons/leftArrow.png" id="3_eoc03"]
+[ext_resource type="Script" uid="uid://c5l8k8cy6j7w4" path="res://scripts/UButton.cs" id="4_6k636"]
+[ext_resource type="Texture2D" uid="uid://b3pt4xeg8eoey" path="res://img/buttons/rightArrow.png" id="5_tsxp7"]
+[ext_resource type="Texture2D" uid="uid://cmc12xx0wcicy" path="res://img/buttons/quickBack.png" id="6_0ilk4"]
+[ext_resource type="Texture2D" uid="uid://c3lncgmfvfdio" path="res://img/buttons/quickSettings.png" id="7_eoc03"]
+[ext_resource type="Texture2D" uid="uid://bi44exfrypwxc" path="res://img/buttons/lvlVerb/1.png" id="8_tsxp7"]
+[ext_resource type="Texture2D" uid="uid://b0spv877vu731" path="res://img/buttons/lvlVerb/2.png" id="9_0ilk4"]
+[ext_resource type="Texture2D" uid="uid://dgn6loa7quhby" path="res://img/buttons/lvlVerb/3.png" id="10_wf5jq"]
+[ext_resource type="Texture2D" uid="uid://c06prvb7ojhoo" path="res://img/buttons/lvlVerb/4.png" id="11_8sr6u"]
+[ext_resource type="Texture2D" uid="uid://c5nvld60cca8i" path="res://img/buttons/review.png" id="12_wv5wo"]
+
+[node name="lvl_menu" type="Node2D"]
+script = ExtResource("1_a1hbb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(404, 132)
+texture = ExtResource("2_ukrfy")
+centered = false
+
+[node name="leftB" type="TextureButton" parent="."]
+offset_left = 645.0
+offset_top = 1216.0
+offset_right = 793.0
+offset_bottom = 1409.03
+texture_normal = ExtResource("3_eoc03")
+script = ExtResource("4_6k636")
+metadata/_custom_type_script = "uid://c5l8k8cy6j7w4"
+
+[node name="rightB" type="TextureButton" parent="."]
+offset_left = 1769.0
+offset_top = 1216.0
+offset_right = 1917.0
+offset_bottom = 1409.0
+texture_normal = ExtResource("5_tsxp7")
+script = ExtResource("4_6k636")
+metadata/_custom_type_script = "uid://c5l8k8cy6j7w4"
+
+[node name="backB" type="TextureButton" parent="."]
+offset_left = 51.0
+offset_top = 1235.0
+offset_right = 206.0
+offset_bottom = 1390.0
+texture_normal = ExtResource("6_0ilk4")
+script = ExtResource("4_6k636")
+metadata/_custom_type_script = "uid://c5l8k8cy6j7w4"
+
+[node name="optionB" type="TextureButton" parent="."]
+offset_left = 246.0
+offset_top = 1235.0
+offset_right = 401.0
+offset_bottom = 1390.0
+texture_normal = ExtResource("7_eoc03")
+script = ExtResource("4_6k636")
+metadata/_custom_type_script = "uid://c5l8k8cy6j7w4"
+
+[node name="verbLvls" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="lvlB1" type="TextureButton" parent="verbLvls"]
+layout_mode = 0
+offset_left = 778.0
+offset_top = 239.0
+offset_right = 933.0
+offset_bottom = 394.0
+texture_normal = ExtResource("8_tsxp7")
+script = ExtResource("4_6k636")
+metadata/_custom_type_script = "uid://c5l8k8cy6j7w4"
+
+[node name="lvlB2" type="TextureButton" parent="verbLvls"]
+layout_mode = 0
+offset_left = 978.0
+offset_top = 239.0
+offset_right = 1133.0
+offset_bottom = 394.0
+texture_normal = ExtResource("9_0ilk4")
+script = ExtResource("4_6k636")
+metadata/_custom_type_script = "uid://c5l8k8cy6j7w4"
+
+[node name="lvlB3" type="TextureButton" parent="verbLvls"]
+layout_mode = 0
+offset_left = 1178.0
+offset_top = 239.0
+offset_right = 1333.0
+offset_bottom = 394.0
+texture_normal = ExtResource("10_wf5jq")
+script = ExtResource("4_6k636")
+metadata/_custom_type_script = "uid://c5l8k8cy6j7w4"
+
+[node name="lvlB4" type="TextureButton" parent="verbLvls"]
+layout_mode = 0
+offset_left = 1378.0
+offset_top = 239.0
+offset_right = 1533.0
+offset_bottom = 394.0
+texture_normal = ExtResource("11_8sr6u")
+script = ExtResource("4_6k636")
+metadata/_custom_type_script = "uid://c5l8k8cy6j7w4"
+
+[node name="lvlB5" type="TextureButton" parent="verbLvls"]
+layout_mode = 0
+offset_left = 1578.0
+offset_top = 212.0
+offset_right = 1783.0
+offset_bottom = 417.0
+texture_normal = ExtResource("12_wv5wo")
+script = ExtResource("4_6k636")
+metadata/_custom_type_script = "uid://c5l8k8cy6j7w4"
+
+[node name="adjLvls" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

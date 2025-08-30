@@ -1,0 +1,385 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using jp_conj_game.scripts;
+using Enums;
+using Godot.NativeInterop;
+
+public partial class Lvl : Node2D
+{
+	private List<Word> _WordList;
+	private List<VerbMaker> _ConjList;
+	private List<Sprite2D> _lifeHearts;
+	private Sprite2D _tagBox;
+	private List<Sprite2D> _tagBoxes;
+	
+	private Sprite2D _timerBox;
+	private Sprite2D _enmArm;
+	private Sprite2D _shurikan;
+	
+	private Label _InputBox;
+	private Timer _timer;
+	
+	private float _totalTime;
+	private byte _life;
+	private bool _passed;
+	private bool _timeStatus;
+
+	private Politeness _politeness;
+	private TenseType _tense;
+	private Positivity _positivity;
+	
+	public override void _Ready()
+	{
+		ushort currLvl = Config.currLvl;
+		_InputBox = GetNode<Label>("inputBox");
+		
+		_tagBox = GetNode<Sprite2D>("tags/TypeBox");
+		_tagBoxes = new List<Sprite2D>();
+		
+		_timerBox = GetNode<Sprite2D>("timerBox");
+		_timer = GetNode<Timer>("Timer");
+		_totalTime = Config.GetTimerLen();
+		_timer.SetWaitTime(_totalTime);
+		_timeStatus = Config.getTimerStatus();
+
+		_enmArm = GetNode<Sprite2D>("timerSet/EnmArm");
+		_shurikan = GetNode<Sprite2D>("timerSet/Shurikan");
+		
+		_life = 3;
+		_lifeHearts = new List<Sprite2D>();
+		_lifeHearts.Add(GetNode<Sprite2D>("Heart"));
+		_lifeHearts.Add(GetNode<Sprite2D>("Heart2"));
+		_lifeHearts.Add(GetNode<Sprite2D>("Heart3"));
+		foreach (var hearts in _lifeHearts)
+		{
+			hearts.Visible = true;
+		}
+		
+		//bg change
+		if (_timeStatus)
+		{
+			GetNode<Node2D>("timerSet").Visible = true;
+			GetNode<Node2D>("noTimerSet").Visible = false;
+		}
+		else
+		{
+			_timerBox.Visible = false;
+			GetNode<Node2D>("timerSet").Visible = false;
+			GetNode<Node2D>("noTimerSet").Visible = true;
+			_passed = false;
+		}
+
+		_passed = true;
+		UpdateIncorrectStuff(false);
+		
+		_ConjList = new List<VerbMaker>();
+		
+		_politeness = Politeness.Plain;
+		_tense = TenseType.Present;
+		_positivity = Positivity.Positive;
+
+		switch (currLvl)
+		{
+			//1 is the default
+			case 2:
+				_politeness = Politeness.Polite;
+				_WordList = VerbReader.GetWords();
+				break;
+			case 3:
+				_politeness = Politeness.Polite;
+				_positivity = Positivity.Negative;
+				_WordList = VerbReader.GetWords();
+				break;
+			case 4:
+				_positivity = Positivity.Negative;
+				_WordList = VerbReader.GetWords();
+				break;
+			case 5:
+				_politeness = Politeness.Both;
+				_positivity =  Positivity.Both;
+				_WordList = VerbReader.GetWords(15);
+				break;
+		}
+		
+		foreach (Word word in _WordList)
+		{
+			_ConjList.Add(new VerbMaker(word,
+				politeness:_politeness,
+				tense:_tense,
+				positivity:_positivity));
+		}
+		
+		UpdateWord();
+		UpdateTags();
+		if (_timeStatus)
+		{
+			_timer.Start();
+		}
+	}
+	
+	public override void _Process(double delta)
+	{
+		if (_timeStatus)
+		{
+			UpdateTimerBox();
+			UpdateEnemy();
+		}
+	}
+	
+	private void UpdateTimerBox()
+	{
+		_timerBox.Scale = new Vector2( (float)(_timer.TimeLeft/_totalTime), 0.028f);
+		
+		if (_timer.TimeLeft <= 0)
+		{
+			WrongWord();
+		}
+	}
+
+	private void UpdateTags()
+	{
+		foreach (Sprite2D node in GetNode<Node2D>("tags").GetChildren())
+		{
+			node.Visible = false;
+		}
+		_tagBoxes.Clear();
+		//politeness
+		Sprite2D politenessBox = (Sprite2D)_tagBox.Duplicate((int)(Node.DuplicateFlags.UseInstantiation));
+		_tagBox.GetParent().AddChild(politenessBox);
+		_tagBoxes.Add(politenessBox);
+		politenessBox.GetNode<RichTextLabel>("type").Text =
+			_ConjList[0].politenessType == Politeness.Polite ? "Polite" : "Plain";
+		politenessBox.Visible = true;
+		
+		//do not show if it's present
+		if (_ConjList[0].tenseType != TenseType.Present)
+		{
+			Sprite2D tenseBox = (Sprite2D)_tagBox.Duplicate((int)(Node.DuplicateFlags.UseInstantiation));
+			_tagBox.GetParent().AddChild(tenseBox);
+			_tagBoxes.Add(tenseBox);
+			tenseBox.GetNode<RichTextLabel>("type").Text = "Past";
+		}
+		
+		//do not show if it's positive
+		if (_ConjList[0].positivityType != Positivity.Positive)
+		{
+			Sprite2D positiveBox = (Sprite2D)_tagBox.Duplicate((int)(Node.DuplicateFlags.UseInstantiation));
+			_tagBox.GetParent().AddChild(positiveBox);
+			_tagBoxes.Add(positiveBox);
+			positiveBox.GetNode<RichTextLabel>("type").Text = "Negative";
+		}
+
+		//only show if the type isn't none
+		if (_ConjList[0]._conjType != ConjType.None)
+		{
+			Sprite2D conjType = (Sprite2D)_tagBox.Duplicate((int)(Node.DuplicateFlags.UseInstantiation));
+			_tagBox.GetParent().AddChild(conjType);
+			_tagBoxes.Add(conjType);
+			string text = "";
+			
+			switch (_ConjList[0]._conjType)
+			{
+				case ConjType.Te:
+					text = "Te Form";
+					break;
+			}
+			
+			conjType.GetNode<RichTextLabel>("type").Text = text;
+		}
+
+		switch (_tagBoxes.Count)
+		{
+			case 1:
+				_tagBoxes[0].Position = new Vector2(1280, 355);
+				break;
+			case 2: 
+				_tagBoxes[0].Position = new Vector2(1280, 355);
+				_tagBoxes[1].Position = new Vector2(1280, 420);
+				break;
+			case 3:
+				_tagBoxes[0].Position = new Vector2(1429, 355);
+				_tagBoxes[1].Position = new Vector2(1280, 420);
+				_tagBoxes[2].Position = new Vector2(1131, 355);
+				break;
+			case 4:
+				_tagBoxes[0].Position = new Vector2(1429, 355);
+				_tagBoxes[1].Position = new Vector2(1429, 420);
+				_tagBoxes[2].Position = new Vector2(1131, 355);
+				_tagBoxes[3].Position = new Vector2(1131, 420);
+				break;
+		}
+
+		foreach (var temp in _tagBoxes)
+		{
+			temp.Visible = true;
+		}
+		
+	}
+
+	private void UpdateEnemy()
+	{
+		var ratio = _timer.GetTimeLeft() / _totalTime;
+		//80 degree movement, 50 offset -> starts at 30 degrees and ends at -50 degrees
+		_enmArm.RotationDegrees = (float) (80 * _timer.GetTimeLeft()/_totalTime) - 50;
+		_shurikan.Position = new Vector2((float)(1147 * ratio + 735) ,897);
+		_shurikan.RotationDegrees -= 2;
+	}
+
+	private void WrongWord()
+	{
+		GD.Print("stupid");
+		UpdateIncorrectStuff(true);
+		RemoveWordOnScreen(false);
+		_life--;
+		switch (_life)
+		{
+			case 0:
+				_passed = false;
+				_lifeHearts[2].Visible = false;
+				break;
+			case 1:
+				_lifeHearts[1].Visible = false;
+				break;
+			case 2:
+				_lifeHearts[0].Visible = false;
+				break;
+		}
+		_WordList.Add(_WordList[0]);
+		_WordList.RemoveAt(0);
+		_ConjList.Add(_ConjList[0]);
+		_ConjList.RemoveAt(0);
+		if (_timeStatus)
+		{
+			_timer.Start(_totalTime + 5);
+		}
+		UpdateWord();
+	}
+	
+	private void UpdateWord()
+	{
+		GD.Print($"the word it {_WordList[0].GetLine()} | the answer is {_ConjList[0]._conjWord} | the type is {_ConjList[0]._verbType}");
+		Label _defLabel = GetNode<Label>("defBox");
+		foreach (Label label in _ConjList[0].GetLabels())
+		{
+			GD.Print($"adding label {label.Text}");
+			if (!HasNode(label.GetPath()))
+			{
+				AddChild(label);
+			}
+			else
+			{
+				label.Visible = true;
+			}
+		}
+
+		_defLabel.Text = "";
+		foreach (string def in _WordList[0].GetDefs())
+		{
+			_defLabel.Text += def + "\n";
+		}
+
+		UpdateTags();
+	}
+
+	private void RemoveWordOnScreen(bool passed)
+	{
+		if (passed)
+		{
+			foreach (Label label in _ConjList[0].GetLabels())
+			{
+				GetParent().RemoveChild(label);
+			}
+		}
+		foreach (Label label in _ConjList[0].GetLabels())
+		{
+			label.Visible = false;
+		}
+	}
+
+	public override void _Input(InputEvent @event)
+	{
+		if (@event is InputEventKey eventKey && eventKey.Pressed && !eventKey.Echo)
+		{
+			switch (eventKey.Keycode)
+			{
+				case Key.Backspace:
+					if (_InputBox.Text != "")
+					{
+						_InputBox.Text  = _InputBox.Text.Substring(0, _InputBox.Text.Length - 1);
+					}
+					break;
+				case Key.Space:
+				case Key.Enter:
+					SubmitAnswer();
+					break;
+				default:
+					char temp = (char)eventKey.Unicode;
+					if (Char.IsLetter(temp))
+					{
+						_InputBox.Text += temp;
+					}
+					break;
+			}
+		}
+	}
+
+	private void CheckWin()
+	{
+		if (_passed)
+		{
+			Config.SetMaxVerbLvl((ushort)(Config.GetMaxVerbLvl() + 1));
+		}
+	}
+	private void SubmitAnswer()
+	{
+		string submited =  _InputBox.Text.ToLower();
+		if (submited == _ConjList[0]._conjWord)
+		{
+			GD.Print("correct!");
+			UpdateIncorrectStuff(false);
+			RemoveWordOnScreen(true);
+			_WordList.RemoveAt(0);
+			_ConjList.RemoveAt(0);
+			GD.Print(_ConjList.Count);
+			//keep playing da game
+			if (_ConjList.Count > 0 && _WordList.Count > 0)
+			{
+				UpdateWord();
+				if (_timeStatus)
+				{
+					_timer.Start(_totalTime);
+				}
+			}
+			else
+			{
+				_timer.Stop();
+				GD.Print("You Won!");
+				CheckWin();
+				GetTree().ChangeSceneToFile("res://src/lvl_menu/lvl_menu.tscn");
+			}
+		}
+		else
+		{
+			WrongWord();
+		}
+		_InputBox.Text = "";
+		GD.Print("word list rn");
+		foreach (var i in _WordList)
+		{
+			i.printLine();
+		}
+	}
+
+	private void UpdateIncorrectStuff(bool visable)
+	{
+		GetNode<Control>("IncorrectStuff").Visible = visable;
+		if (visable)
+		{
+			GetNode<Label>("IncorrectStuff/PrevAnswer").Text = _ConjList[0]._conjWord;
+			GetNode<Label>("IncorrectStuff/UserPrevAnswer").Text = _InputBox.Text.ToLower();
+		}
+	}
+	
+}

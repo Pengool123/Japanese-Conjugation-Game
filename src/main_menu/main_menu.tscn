@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://dmbdrrf06bw1x"]
+
+[ext_resource type="Script" uid="uid://b24006kopcxtv" path="res://src/main_menu/MainMenu.cs" id="1_no1ax"]
+[ext_resource type="Texture2D" uid="uid://c5miva8h1kf1w" path="res://img/buttons/play.png" id="2_wrmdx"]
+[ext_resource type="Texture2D" uid="uid://d4n2feeteci50" path="res://img/buttons/options.png" id="3_b2bbe"]
+[ext_resource type="Script" uid="uid://c5l8k8cy6j7w4" path="res://scripts/UButton.cs" id="3_wrmdx"]
+[ext_resource type="Texture2D" uid="uid://b1nvvcuvau4ma" path="res://img/buttons/quit.png" id="4_axgno"]
+[ext_resource type="Texture2D" uid="uid://3xl8aj3h4lwq" path="res://img/main_menu/title.png" id="5_bk001"]
+
+[node name="mainMenu" type="Node2D"]
+script = ExtResource("1_no1ax")
+
+[node name="playB" type="TextureButton" parent="."]
+offset_left = 877.0
+offset_top = 687.0
+offset_right = 917.0
+offset_bottom = 727.0
+texture_normal = ExtResource("2_wrmdx")
+script = ExtResource("3_wrmdx")
+metadata/_custom_type_script = "uid://c5l8k8cy6j7w4"
+
+[node name="optionB" type="TextureButton" parent="."]
+offset_left = 877.0
+offset_top = 885.0
+offset_right = 1682.0
+offset_bottom = 1040.0
+texture_normal = ExtResource("3_b2bbe")
+script = ExtResource("3_wrmdx")
+metadata/_custom_type_script = "uid://c5l8k8cy6j7w4"
+
+[node name="quitB" type="TextureButton" parent="."]
+offset_left = 877.0
+offset_top = 1085.0
+offset_right = 1682.0
+offset_bottom = 1240.0
+texture_normal = ExtResource("4_axgno")
+script = ExtResource("3_wrmdx")
+metadata/_custom_type_script = "uid://c5l8k8cy6j7w4"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1280, 360)
+texture = ExtResource("5_bk001")
