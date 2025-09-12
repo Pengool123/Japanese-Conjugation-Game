@@ -8,8 +8,8 @@ The whole game is basiclly a typing game.
 # To-Do List:
 <ul>
   <li>Add more verb conjugations</li>
-  <li><s>Add a 2nd page for adjectives</s>s></li>
+  <li><s>Add a 2nd page for adjectives</s></li>
   <li>Clean up the code</li>
-  <li><s>Add sfx + </s>s>effects</li>
+  <li><s>Add sfx + </s>effects</li>
   <li>Make it an .exe and upload it to itch.io</li>
 </ul>
