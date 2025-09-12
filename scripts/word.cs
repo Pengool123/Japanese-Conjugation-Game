@@ -9,39 +9,19 @@ namespace jp_conj_game.scripts;
 
 public class Word
 {
-    private string _line;
-
-    public string GetLine()
-    {
-        return _line;
-    }
+    public string line { get; private set; }
 
     //no def
-    private string _wordLine;
-    public string GetWordLine()
-    {
-        return _wordLine;
-    }
+    public string wordLine { get; private set; }
 
-    private string _noFurigana;
+    public string noFurigana { get; private set; }
 
-    public string GetNoFuriga()
-    {
-        return _noFurigana;
-    }
+    public string onlyGana;
+    
+    public string romaji { get; private set; }
 
-    private string _onlyGana;
+    public bool isVerb { get; private set; }
 
-    public string GetOnlyGana()
-    {
-        return _onlyGana;
-    }
-    private string _romaji { get; set; }
-
-    public string GetRomaji()
-    {
-        return _romaji;
-    }
 
     private List<string> _defs = new List<string>();
 
@@ -50,12 +30,8 @@ public class Word
         return _defs;
     }
 
-    private VerbType _type;
+    public EndingType type { get; private set; }
 
-    public VerbType GetType()
-    {
-        return _type;
-    }
 
     private List<string> _enSounds =
     [
@@ -72,11 +48,13 @@ public class Word
         "n", "v", "ka", "ke"
     ];
 
-    public Word(string line = "来[く]る{to come/kaboom}", VerbType type = VerbType.Godan)
+    public Word(string inputLine = "来[く]る{to come}", EndingType type = EndingType.Godan, bool isVerb = true)
     {
+        
         GD.Print(line + type);
-        _line = line;
-        _type = type;
+        line = inputLine;
+        this.type = type;
+        this.isVerb = isVerb;
         _defs = new List<string>();
         
         bool inFurigana = false;
@@ -89,11 +67,11 @@ public class Word
             {
                 case '[':
                     inFurigana = true;
-                    _wordLine += i;
+                    wordLine += i;
                     break;
                 case ']':
                     inFurigana = false;
-                    _wordLine += i;
+                    wordLine += i;
                     break;
                 case '{':
                     defStart = true;
@@ -102,15 +80,15 @@ public class Word
 
                     if (!defStart)
                     {
-                        _wordLine += i;
+                        wordLine += i;
                         if (!inFurigana)
                         {
-                            _noFurigana += i;
+                            noFurigana += i;
                         }
 
                         if (isGana(i))
                         {
-                            _onlyGana += i;
+                            onlyGana += i;
                         }
                     }
                     else
@@ -149,13 +127,13 @@ public class Word
         int hiraganaOffset = 12353;
         bool smallChar = true;
         
-        foreach (char i in _onlyGana)
+        foreach (char i in onlyGana)
         {
             int index = i - hiraganaOffset;
-            string romaji = _enSounds[index];
+            string rom = _enSounds[index];
 
             smallChar = true;
-            switch (romaji)
+            switch (rom)
             {
                 case "1":
                     tempAddon = "ya";
@@ -179,10 +157,10 @@ public class Word
                 //small tsu
                 if (prevChar == "0")
                 {
-                    _romaji += romaji[0];
+                    romaji += rom[0];
                 }
 
-                _romaji += romaji;
+                romaji += rom;
             }
             //on a small character, check the prev character
             else
@@ -194,12 +172,12 @@ public class Word
                    prevChar == "ri" ||
                    prevChar == "gi")
                 {
-                    _romaji += prevChar[0] + tempAddon;
+                    romaji += prevChar[0] + tempAddon;
                 }
                 //shi, chi, ji
                 else
                 {
-                    _romaji += prevChar.Substring(0, prevChar.Length - 1) + tempAddon[1];
+                    romaji += prevChar.Substring(0, prevChar.Length - 1) + tempAddon[1];
                 }
             }
 
@@ -223,7 +201,7 @@ public class Word
 
     public void printLine()
     {
-        GD.Print($"word line is: {_line} | no furigana is: {_noFurigana} | only gana is: {_onlyGana} | romaji is {_romaji} | the defs are");
+        GD.Print($"word line is: {line} | no furigana is: {noFurigana} | only gana is: {onlyGana} | romaji is {romaji} | the defs are");
         foreach (var i in _defs)
         {
             GD.Print(i);

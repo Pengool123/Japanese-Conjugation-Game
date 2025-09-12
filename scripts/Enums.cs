@@ -1,14 +1,16 @@
 ﻿namespace Enums
 {
-    public enum VerbType
+    public enum EndingType
     {
         Irregular,
         IrregularGodan,
         Godan,
-        Ichidan
+        Ichidan,
+        Na,
+        I
     }
 
-    public enum EndingType
+    public enum VerbEndingType
     {
         Uru,
         Tsu,
@@ -42,6 +44,7 @@
     public enum ConjType
     {
         None,
-        Te
+        Te,
+        TeIru
     }
 }

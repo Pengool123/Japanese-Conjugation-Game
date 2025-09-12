@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://rm7cgsfgw6v4"]
+[gd_scene load_steps=21 format=3 uid="uid://rm7cgsfgw6v4"]
 
 [ext_resource type="Script" uid="uid://beoveytpnsya2" path="res://src/lvl/Lvl.cs" id="1_vt5go"]
 [ext_resource type="Texture2D" uid="uid://bsfhnttn7ppq2" path="res://img/lvl/white.png" id="2_0kghk"]
@@ -16,7 +16,10 @@
 [ext_resource type="Texture2D" uid="uid://hke5gnepo4jv" path="res://img/lvl/heart.png" id="6_txm1s"]
 [ext_resource type="Texture2D" uid="uid://c8esmmb017os5" path="res://img/lvl/player.png" id="7_4qset"]
 [ext_resource type="Texture2D" uid="uid://bs0awa8rf46c" path="res://img/lvl/Shurikan.png" id="8_rkxq4"]
+[ext_resource type="Texture2D" uid="uid://ds0bhso5menue" path="res://img/lvl/black.png" id="12_p2w7f"]
 [ext_resource type="Texture2D" uid="uid://dd1kpxcm3yopu" path="res://img/lvl/typeBox.png" id="17_o46ed"]
+[ext_resource type="AudioStream" uid="uid://brkhr3dwgr4lv" path="res://sounds/swordClash.mp3" id="19_gl65g"]
+[ext_resource type="AudioStream" uid="uid://otb6f5xy45r" path="res://sounds/thud.mp3" id="20_hq3kt"]
 
 [node name="lvl" type="Node2D"]
 script = ExtResource("1_vt5go")
@@ -74,6 +77,19 @@ texture = ExtResource("7_4qset")
 [node name="Shurikan" type="Sprite2D" parent="timerSet"]
 position = Vector2(1882, 897)
 texture = ExtResource("8_rkxq4")
+
+[node name="flashTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="whiteFlash" type="Sprite2D" parent="."]
+position = Vector2(1281.13, 959.125)
+scale = Vector2(2563.75, 964.25)
+texture = ExtResource("2_0kghk")
+
+[node name="blackFlash" type="Sprite2D" parent="."]
+position = Vector2(1282.88, 984.875)
+scale = Vector2(514.05, 183.15)
+texture = ExtResource("12_p2w7f")
 
 [node name="textBg" type="Sprite2D" parent="."]
 texture = ExtResource("2_rceeu")
@@ -215,3 +231,11 @@ theme_override_colors/default_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/normal_font_size = 30
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="correct" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("19_gl65g")
+volume_db = -3.368
+
+[node name="incorrect" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("20_hq3kt")
+volume_db = -4.631

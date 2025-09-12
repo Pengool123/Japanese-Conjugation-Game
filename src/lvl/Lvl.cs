@@ -1,7 +1,9 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using jp_conj_game.scripts;
 using Enums;
 using Godot.NativeInterop;
@@ -9,7 +11,7 @@ using Godot.NativeInterop;
 public partial class Lvl : Node2D
 {
 	private List<Word> _WordList;
-	private List<VerbMaker> _ConjList;
+	private List<conjMaker> _ConjList;
 	private List<Sprite2D> _lifeHearts;
 	private Sprite2D _tagBox;
 	private List<Sprite2D> _tagBoxes;
@@ -17,14 +19,23 @@ public partial class Lvl : Node2D
 	private Sprite2D _timerBox;
 	private Sprite2D _enmArm;
 	private Sprite2D _shurikan;
+	private Sprite2D _whiteFlash;
+	private Sprite2D _blackFlash;
 	
 	private Label _InputBox;
 	private Timer _timer;
+	private Timer _flashTimer;
+
+	private AudioStreamPlayer _correctsfx;
+	private AudioStreamPlayer _incorrectsfx;
 	
 	private float _totalTime;
 	private byte _life;
 	private bool _passed;
 	private bool _timeStatus;
+	private bool _wasRight;
+	private byte _wordCount;
+	private List<ConjType> _conjType;
 
 	private Politeness _politeness;
 	private TenseType _tense;
@@ -32,6 +43,8 @@ public partial class Lvl : Node2D
 	
 	public override void _Ready()
 	{
+		_conjType = new List<ConjType>();
+		_WordList = new List<Word>();
 		ushort currLvl = Config.currLvl;
 		_InputBox = GetNode<Label>("inputBox");
 		
@@ -43,9 +56,19 @@ public partial class Lvl : Node2D
 		_totalTime = Config.GetTimerLen();
 		_timer.SetWaitTime(_totalTime);
 		_timeStatus = Config.getTimerStatus();
+		_wasRight = true;
 
 		_enmArm = GetNode<Sprite2D>("timerSet/EnmArm");
 		_shurikan = GetNode<Sprite2D>("timerSet/Shurikan");
+		
+		_flashTimer = GetNode<Timer>("flashTimer");
+		_whiteFlash = GetNode<Sprite2D>("whiteFlash");
+		_whiteFlash.Visible = false;
+		_blackFlash = GetNode<Sprite2D>("blackFlash");
+		_blackFlash.Visible = false;
+		
+		_correctsfx =  GetNode<AudioStreamPlayer>("correct");
+		_incorrectsfx = GetNode<AudioStreamPlayer>("incorrect");
 		
 		_life = 3;
 		_lifeHearts = new List<Sprite2D>();
@@ -74,41 +97,68 @@ public partial class Lvl : Node2D
 		_passed = true;
 		UpdateIncorrectStuff(false);
 		
-		_ConjList = new List<VerbMaker>();
+		_ConjList = new List<conjMaker>();
 		
 		_politeness = Politeness.Plain;
 		_tense = TenseType.Present;
 		_positivity = Positivity.Positive;
 
-		switch (currLvl)
+		_wordCount = 10;
+		if (Config.isVerb)
 		{
-			//1 is the default
-			case 2:
-				_politeness = Politeness.Polite;
-				_WordList = VerbReader.GetWords();
-				break;
-			case 3:
-				_politeness = Politeness.Polite;
-				_positivity = Positivity.Negative;
-				_WordList = VerbReader.GetWords();
-				break;
-			case 4:
-				_positivity = Positivity.Negative;
-				_WordList = VerbReader.GetWords();
-				break;
-			case 5:
-				_politeness = Politeness.Both;
-				_positivity =  Positivity.Both;
-				_WordList = VerbReader.GetWords(15);
-				break;
+			switch (currLvl)
+			{
+				//1 is the default
+				case 2:
+					_politeness = Politeness.Polite;
+					break;
+				case 3:
+					_politeness = Politeness.Polite;
+					_positivity = Positivity.Negative;
+					break;
+				case 4:
+					_positivity = Positivity.Negative;
+					break;
+				case 5:
+					_politeness = Politeness.Both;
+					_positivity =  Positivity.Both;
+					_wordCount = 15;
+					break;
+				case 6:
+					_conjType.Add(ConjType.Te);
+					break;
+				default:
+					break;
+			}
 		}
-		
-		foreach (Word word in _WordList)
+		else
 		{
-			_ConjList.Add(new VerbMaker(word,
-				politeness:_politeness,
-				tense:_tense,
-				positivity:_positivity));
+			switch (currLvl)
+			{
+				default:
+					break;
+			}
+		}
+
+		if (!_conjType.Any())
+		{
+			_conjType.Add(ConjType.None);
+		}
+
+		foreach (ConjType conjType in _conjType)
+		{
+			
+			_WordList = WordReader.GetWords(_wordCount);
+			
+			foreach (Word word in _WordList)
+			{
+				_ConjList.Add(new conjMaker(word,
+					politeness: _politeness,
+					tense: _tense,
+					positivity: _positivity,
+					conjType: conjType));
+			}
+			_WordList.Clear();
 		}
 		
 		UpdateWord();
@@ -131,6 +181,25 @@ public partial class Lvl : Node2D
 	private void UpdateTimerBox()
 	{
 		_timerBox.Scale = new Vector2( (float)(_timer.TimeLeft/_totalTime), 0.028f);
+		
+		if (_wasRight)
+		{
+			Color c = _whiteFlash.Modulate;
+			c.A = (float)_flashTimer.TimeLeft;
+			_whiteFlash.Modulate = c;
+		}
+		else
+		{
+			Color c = _blackFlash.Modulate;
+			c.A = (float)_flashTimer.TimeLeft;
+			_blackFlash.Modulate = c;
+		}
+
+		if (_flashTimer.TimeLeft <= 0)
+		{
+			_whiteFlash.Visible = false;
+			_blackFlash.Visible = false;
+		}
 		
 		if (_timer.TimeLeft <= 0)
 		{
@@ -229,6 +298,10 @@ public partial class Lvl : Node2D
 
 	private void WrongWord()
 	{
+		_wasRight = false;
+		_blackFlash.Visible = true;
+		_flashTimer.Start();
+		
 		GD.Print("stupid");
 		UpdateIncorrectStuff(true);
 		RemoveWordOnScreen(false);
@@ -246,20 +319,18 @@ public partial class Lvl : Node2D
 				_lifeHearts[0].Visible = false;
 				break;
 		}
-		_WordList.Add(_WordList[0]);
-		_WordList.RemoveAt(0);
 		_ConjList.Add(_ConjList[0]);
 		_ConjList.RemoveAt(0);
 		if (_timeStatus)
 		{
-			_timer.Start(_totalTime + 5);
+			_totalTime = Config.GetTimerLen() + 5;
+			_timer.Start(_totalTime);
 		}
 		UpdateWord();
 	}
 	
 	private void UpdateWord()
 	{
-		GD.Print($"the word it {_WordList[0].GetLine()} | the answer is {_ConjList[0]._conjWord} | the type is {_ConjList[0]._verbType}");
 		Label _defLabel = GetNode<Label>("defBox");
 		foreach (Label label in _ConjList[0].GetLabels())
 		{
@@ -275,7 +346,7 @@ public partial class Lvl : Node2D
 		}
 
 		_defLabel.Text = "";
-		foreach (string def in _WordList[0].GetDefs())
+		foreach (string def in _ConjList[0].Defs)
 		{
 			_defLabel.Text += def + "\n";
 		}
@@ -338,17 +409,23 @@ public partial class Lvl : Node2D
 		if (submited == _ConjList[0]._conjWord)
 		{
 			GD.Print("correct!");
+			_wasRight = true;
+			_whiteFlash.Visible = true;
+			_flashTimer.Start();
+			_correctsfx.Play();
+			
 			UpdateIncorrectStuff(false);
 			RemoveWordOnScreen(true);
-			_WordList.RemoveAt(0);
 			_ConjList.RemoveAt(0);
 			GD.Print(_ConjList.Count);
 			//keep playing da game
-			if (_ConjList.Count > 0 && _WordList.Count > 0)
+			if (_ConjList.Count > 0)
 			{
 				UpdateWord();
 				if (_timeStatus)
 				{
+					//in case it was inc by prev answer being wrong
+					_totalTime =  Config.GetTimerLen();
 					_timer.Start(_totalTime);
 				}
 			}
@@ -365,11 +442,6 @@ public partial class Lvl : Node2D
 			WrongWord();
 		}
 		_InputBox.Text = "";
-		GD.Print("word list rn");
-		foreach (var i in _WordList)
-		{
-			i.printLine();
-		}
 	}
 
 	private void UpdateIncorrectStuff(bool visable)
@@ -377,6 +449,7 @@ public partial class Lvl : Node2D
 		GetNode<Control>("IncorrectStuff").Visible = visable;
 		if (visable)
 		{
+			_incorrectsfx.Play();
 			GetNode<Label>("IncorrectStuff/PrevAnswer").Text = _ConjList[0]._conjWord;
 			GetNode<Label>("IncorrectStuff/UserPrevAnswer").Text = _InputBox.Text.ToLower();
 		}

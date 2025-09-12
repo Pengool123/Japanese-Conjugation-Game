@@ -55,5 +55,15 @@
     "開[あ]ける{to open (something)}",
     "閉[し]める{to close (something)}",
     "忘[わす]れる{to forget}"
+  ],
+  "IAdj": [
+	"いい{good}",
+	"悪[わる]い{bad}",
+	"高[たか]い{high/expensive}",
+	"危[あぶ]ない{dangerous}"
+  ],
+  "NaAdj": [
+	"上[じょう]手[ず]{skillful/good (at)}",
+	"元[げん]気[き]{lively/healthy}"
   ]
 }

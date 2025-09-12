@@ -13,7 +13,7 @@ public partial class MainMenu : Node2D
 	public override void _Ready()
 	{
 		//set up all global stuff
-		VerbReader.Load();
+		WordReader.Load();
 		Config.Load();
 		Config.wasInLvlMenu = false;
 

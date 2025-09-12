@@ -14,8 +14,8 @@ public class OnScreenJPText
         int size = 100)
     {
         _labels = new List<Label>();
-        string noFuri = word.GetNoFuriga();
-        string fullWord = word.GetWordLine();
+        string noFuri = word.noFurigana;
+        string fullWord = word.wordLine;
         int length = noFuri.Length;
         //go to the top left of the string for furigana text
         int startX = x - length * size / 2;

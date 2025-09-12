@@ -1,12 +1,13 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using Enums;
 using jp_conj_game.scripts;
 using FileAccess = Godot.FileAccess;
 
-public class VerbReader
+public class WordReader
 {
 	private static string _path = "res://json/verbList.json";
 	private static FileAccess _file;
@@ -18,6 +19,8 @@ public class VerbReader
 		public List<string> IrregularGodan { get; set; }
 		public List<string> Godan { get; set; }
 		public List<string> Ichidan { get; set; }
+		public List<string> IAdj { get; set; }
+		public List<string> NaAdj { get; set; }
 	}
 
 	public static void Load()
@@ -48,113 +51,107 @@ public class VerbReader
 		}
 	}
 
-	public static List<Word> GetWords(int length = 7)
+	public static List<Word> GetWords(int length = 7, bool mix = false)
 	{
 		int len = length >= 7 ? length : 7;
-		int cutOff = (len - 4) / 3;
-		string currWord = "";
+		int cutOff = Config.isVerb ?  (len - 4) / 3 : len/2;
 		List<Word> words = new List<Word>();
 		List<int> visited = new List<int>();
 		Random random = new Random();
-		
-		GD.Print(_json.Irregular);
-		
-		//first get the 4 irregular verbs
-		for (int i = 0; i < 4; i++)
-		{
-			words.Add(new Word(_json.Irregular[i], type:VerbType.Irregular));
-		}
 
-		if (!Config.getIrrGStatus())
+		if (!mix && Config.isVerb)
 		{
-			int maxIrrGodan = _json.IrregularGodan.Count-1;
-			for (int i = 0; i < cutOff; i++)
+			//first get the 4 irregular verbs
+			for (int i = 0; i < 4; i++)
 			{
-				int ran = random.Next(maxIrrGodan);
-				if (!visited.Contains(ran))
-				{
-					words.Add(new Word(_json.IrregularGodan[ran], type:VerbType.IrregularGodan));
-					visited.Add(ran);
-				}
-				else
-				{
-					//if it has gone through all of it just make dupes
-					if (visited.Count >= maxIrrGodan)
-					{
-						visited.Clear();
-					}
-					i--;
-				}
+				words.Add(new Word(_json.Irregular[i], type:EndingType.Irregular, isVerb:true));
 			}
+
+			words.Concat(makeList(type:EndingType.Ichidan, length:cutOff, isVerb:true));
+			words.Concat(makeList(type:EndingType.IrregularGodan, length:cutOff, isVerb:true));
+			//the rest are godan
+			words.Concat(makeList(type:EndingType.Godan, length: (length - 4) - cutOff*2, isVerb:true));
+		}
+		else if(!mix && !Config.isVerb)
+		{
+			words.Concat(makeList(type:EndingType.Na, length:cutOff, isVerb:false));
+			words.Concat(makeList(type:EndingType.I, length: length - cutOff, isVerb:false));
 		}
 		else
 		{
-			int maxIrrGodan = _json.CommonIrrGodan.Count-1;
-			for (int i = 0; i < cutOff; i++)
+			cutOff = (length - 4) / 6;
+			for (int i = 0; i < 4; i++)
 			{
-				int ran = random.Next(maxIrrGodan);
-				if (!visited.Contains(ran))
+				words.Add(new Word(_json.Irregular[i], type:EndingType.Irregular, isVerb:true));
+			}
+			words.Concat(makeList(type:EndingType.Ichidan, length:cutOff, isVerb:true));
+			words.Concat(makeList(type:EndingType.IrregularGodan, length:cutOff, isVerb:true));
+			words.Concat(makeList(type:EndingType.Godan, length: cutOff, isVerb:true));
+			words.Concat(makeList(type:EndingType.Na, length:cutOff, isVerb:false));
+			words.Concat(makeList(type:EndingType.I, length: length - cutOff*6, isVerb:false));
+		}
+		
+		
+		Shuffle(words);
+		return words;
+	}
+
+	private static List<Word> makeList(EndingType type = EndingType.Godan, int length = 1, bool isVerb = true)
+	{
+		List<int> visited = new List<int>();
+		List<Word> words = new List<Word>();
+		Random random =  new Random();
+		
+		List<string> array;
+		switch (type)
+		{
+			case EndingType.Godan:
+				array = _json.Godan;
+				break;
+			case EndingType.IrregularGodan:
+				if (Config.getIrrGStatus())
 				{
-					words.Add(new Word(_json.CommonIrrGodan[ran], type:VerbType.IrregularGodan));
-					visited.Add(ran);
+					array = _json.CommonIrrGodan;
 				}
 				else
 				{
-					//if it has gone through all of it just make dupes
-					if (visited.Count >= maxIrrGodan)
-					{
-						visited.Clear();
-					}
-					i--;
+					array = _json.IrregularGodan;	
 				}
+				break;
+			case EndingType.Ichidan:
+				array = _json.Ichidan;
+				break;
+			case EndingType.Na:
+				array = _json.NaAdj;
+				break;
+			case EndingType.I:
+				array = _json.IAdj;
+				break;
+			default:
+				array = _json.Godan;
+				break;
+		}
+		
+		int max = array.Count-1;
+		for (int i = 0; i < length; i++)
+		{
+			int ran = random.Next(max);
+			if (!visited.Contains(ran))
+			{
+				words.Add(new Word(array[ran], type:type));
+				visited.Add(ran);
+			}
+			else
+			{
+				if (visited.Count-1 >= max)
+				{
+					visited.Clear();
+				}
+
+				i--;
 			}
 		}
 
-		visited.Clear();
-		int maxIchidan = _json.Ichidan.Count-1;
-		for (int i = 0; i < cutOff; i++)
-		{
-			int ran = random.Next(maxIchidan);
-			if (!visited.Contains(ran))
-			{
-				words.Add(new Word(_json.Ichidan[ran], type:VerbType.Ichidan));
-				visited.Add(ran);
-			}
-			else
-			{
-				//if it has gone through all of it just make dupes
-				if (visited.Count >= maxIchidan)
-				{
-					visited.Clear();
-				}
-				i--;
-			}
-		}
-		
-		visited.Clear();
-		int maxGodan = _json.Godan.Count-1;
-		//diff equation in case of a decimal
-		//(the rest of the list will be godan)
-		for (int i = 0; i < length - 4 - cutOff*2; i++)
-		{
-			int ran = random.Next(maxGodan);
-			if (!visited.Contains(ran))
-			{
-				words.Add(new Word(_json.Godan[ran], type:VerbType.Godan));
-				visited.Add(ran);
-			}
-			else
-			{
-				//if it has gone through all of it just make dupes
-				if (visited.Count >= maxGodan)
-				{
-					visited.Clear();
-				}
-				i--;
-			}
-		}
-		
-		Shuffle(words);
 		return words;
 	}
 	
