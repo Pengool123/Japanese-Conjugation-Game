@@ -42,7 +42,7 @@ public partial class LvlPrev : Node2D
 	{
 		string nameTxt = "temp";
 		string descTxt = "temp";
-		GD.Print(_name + "2");
+		GD.Print(_name + " 2");
 		if (isVerb)
 		{
 			switch (lvl)
@@ -53,7 +53,7 @@ public partial class LvlPrev : Node2D
 					break;
 				case 2:
 					nameTxt = "Polite form";
-					descTxt = "";
+					descTxt = "Change the stem if need be, and add ~ます to it";
 					break;
 			}
 		}

@@ -19,13 +19,16 @@ public partial class conjMaker : Label
 
     private string _line { get; set; }
     public string _conjWord { get; private set; }
-    private bool _isVerb {get; set;}
+    public bool isVerb {get; private set;}
     private bool _irregular {get; set;}
     private bool _iAdj { get; set; }
     public Combonation _combonation { get; private set; }
     public TenseType tenseType { get; private set; }
+    public bool activeTense { get; private set; }
     public Positivity positivityType { get; private set; }
+    public bool activePositivity { get; private set; }
     public Politeness politenessType { get; private set; }
+    public bool  activePoliteness { get; private set; }
     public EndingType EndingType { get; private set; }
     public ConjType _conjType { get; private set; }
     private VerbEndingType VerbEndingType { get; set; }
@@ -45,6 +48,30 @@ public partial class conjMaker : Label
         int y=150,
         int size = 100)
     {
+        MakeWord(word,
+            tense,
+            positivity,
+            politeness,
+            conjType,
+            x,
+            y,
+            size);
+        
+    }
+
+    private void MakeWord(Word word = null,
+        TenseType tense= TenseType.Present,
+        Positivity positivity= Positivity.Positive,
+        Politeness politeness= Politeness.Plain,
+        ConjType conjType= ConjType.None,
+        int x=1280,
+        int y=150,
+        int size = 100)
+    {
+        activePoliteness = true;
+        activeTense = true;
+        activePositivity = true;
+        
         if (word == null)
         {
             GD.Print("the word is null in verb maker");
@@ -59,7 +86,7 @@ public partial class conjMaker : Label
         _irregular = EndingType == EndingType.Irregular;
         _iAdj = EndingType == EndingType.I;
         
-        _isVerb = word.isVerb;
+        isVerb = word.isVerb;
         _line = word.line;
         EndingType = word.type;
         _conjType = conjType;
@@ -171,7 +198,70 @@ public partial class conjMaker : Label
                 ConjNone();
                 break;
             case ConjType.Te:
+                activePoliteness = false;
+                activeTense = false;
                 ConjTe();
+                break;
+            case ConjType.TeIru:
+                ConjTeIru();
+                break;
+            case ConjType.Presump:
+                activePositivity = false;
+                activeTense = false;
+                ConjPresump();
+                break;
+            case ConjType.Tai:
+                ConjTai();
+                break;
+            case ConjType.Potential:
+                ConjPotential();
+                break;
+            case ConjType.Passive:
+                ConjPassive();
+                break;
+            case ConjType.Causative:
+                ConjCausative();
+                break;
+            case ConjType.CausativePas:
+                ConjCausativePas();
+                break;
+            case ConjType.Conditional:
+                activePoliteness = false;
+                activeTense = false;
+                ConjConditional();
+                break;
+            case ConjType.Provisional:
+                activeTense = false;
+                ConjProvisional();
+                break;
+            case ConjType.Imperative:
+                activePositivity = false;
+                activeTense = false;
+                ConjImperative();
+                break;
+            case ConjType.Adverbal:
+                activeTense = false;
+                activePositivity = false;
+                politenessType = Politeness.Plain;
+                ConjAdverbal();
+                break;
+            case ConjType.Naru:
+                activeTense = false;
+                activePositivity = false;
+                politenessType = Politeness.Plain;
+                ConjNaru();
+                break;
+            case ConjType.Suru:
+                activeTense = false;
+                activePositivity = false;
+                politenessType = Politeness.Plain;
+                ConjSuru();
+                break;
+            case ConjType.Sugiru:
+                activeTense = false;
+                activePositivity = false;
+                politenessType = Politeness.Plain;
+                ConjSugiru();
                 break;
         }
     
@@ -230,7 +320,7 @@ public partial class conjMaker : Label
         switch (_combonation)
         {
             case Combonation.Polite:
-                if (_isVerb)
+                if (isVerb)
                 {
                     ending = "masu";
                     if (!_irregular)
@@ -264,7 +354,7 @@ public partial class conjMaker : Label
                 break;
             
             case Combonation.PoliteNegative:
-                if (_isVerb)
+                if (isVerb)
                 {
                     ending = "masen";
                     if (!_irregular)
@@ -307,7 +397,7 @@ public partial class conjMaker : Label
                 break;
             
             case Combonation.PolitePast:
-                if (_isVerb)
+                if (isVerb)
                 {
                     ending = "mashita";
                     if (!_irregular)
@@ -349,7 +439,7 @@ public partial class conjMaker : Label
                 break;
             
             case Combonation.PoliteNegativePast:
-                if (_isVerb)
+                if (isVerb)
                 {
                     ending = "masendeshita";
                     if (!_irregular)
@@ -391,7 +481,7 @@ public partial class conjMaker : Label
                 break;
             
             case Combonation.Plain:
-                if (!_isVerb && !_iAdj)
+                if (!isVerb && !_iAdj)
                 {
                     _conjWord += "da";
                 }
@@ -402,7 +492,7 @@ public partial class conjMaker : Label
                 break;
             
             case Combonation.PlainNegative:
-                if (_isVerb)
+                if (isVerb)
                 {
                     ending = "nai";
                     if (!_irregular)
@@ -444,7 +534,7 @@ public partial class conjMaker : Label
                 break;
             
             case Combonation.PlainPast:
-                if (_isVerb)
+                if (isVerb)
                 {
                     if (!_irregular)
                     {
@@ -503,7 +593,7 @@ public partial class conjMaker : Label
                 break;
             
             case Combonation.PlainNegativePast:
-                if (_isVerb)
+                if (isVerb)
                 {
                     ending = "nakatta";
                     if (!_irregular)
@@ -550,29 +640,36 @@ public partial class conjMaker : Label
     {
         if (positivityType == Positivity.Positive)
         {
-            if (_isVerb)
+            if (isVerb)
             {
                 string ending = "";
                 if (!_irregular)
                 {
-                    switch (VerbEndingType)
+                    if (EndingType == EndingType.Ichidan)
                     {
-                        case VerbEndingType.Uru:
-                        case VerbEndingType.Tsu:
-                            ending = "tte";
-                            break;
-                        case VerbEndingType.Su:
-                            ending = "shite";
-                            break;
-                        case VerbEndingType.Ku:
-                            ending = "ite";
-                            break;
-                        case VerbEndingType.Gu:
-                            ending = "ide";
-                            break;
-                        case VerbEndingType.Nubumu:
-                            ending = "nde";
-                            break;
+                        ending = "te";
+                    }
+                    else
+                    {
+                        switch (VerbEndingType)
+                        {
+                            case VerbEndingType.Uru:
+                            case VerbEndingType.Tsu:
+                                ending = "tte";
+                                break;
+                            case VerbEndingType.Su:
+                                ending = "shite";
+                                break;
+                            case VerbEndingType.Ku:
+                                ending = "ite";
+                                break;
+                            case VerbEndingType.Gu:
+                                ending = "ide";
+                                break;
+                            case VerbEndingType.Nubumu:
+                                ending = "nde";
+                                break;
+                        }
                     }
                     ChangeStem(ending, true);
                 }
@@ -612,7 +709,7 @@ public partial class conjMaker : Label
         //negative te form
         else
         {
-            if (_isVerb)
+            if (isVerb)
             {
                 string ending = "nakute";
                 if (!_irregular)
@@ -671,6 +768,651 @@ public partial class conjMaker : Label
         ConjNone();
     }
 
+    private void ConjPresump()
+    {
+        if (politenessType == Politeness.Polite)
+        {
+            string ending = "mashou";
+            if (!_irregular)
+            {
+                ChangeStem("i");
+            }
+            else
+            {
+                switch (_conjWord)
+                {
+                    case "kuru":
+                        _conjWord = "ki";
+                        break;
+                    case "suru":
+                        _conjWord = "shi";
+                        break;
+                    case "iku":
+                        _conjWord = "iki";
+                        break;
+                    case "aru":
+                        _conjWord = "ari";
+                        break;
+                }
+            }
+            _conjWord += ending;
+        }
+        else
+        {
+            string ending = "mou";
+            if (!_irregular)
+            {
+                if (EndingType == EndingType.Ichidan)
+                {
+                    ending = "you";
+                    ChangeStem(ending, true);
+                }
+                else
+                {
+                    ChangeStem("o");
+                    _conjWord += ending;
+                }
+            }
+            else
+            {
+                switch (_conjWord)
+                {
+                    case "kuru":
+                        _conjWord = "koyou";
+                        break;
+                    case "suru":
+                        _conjWord = "shiyou";
+                        break;
+                    case "iku":
+                        _conjWord = "ikou";
+                        break;
+                    case "aru":
+                        _conjWord = "arou";
+                        break;
+                }
+            }
+        }
+    }
+
+    private void ConjTai()
+    {
+        if (_conjWord == "aru" && _irregular)
+        {
+            MakeWord(word:WordReader.GetNormWord());
+            return;
+        }
+        if (!_irregular)
+        {
+            ChangeStem("i");
+        }
+        else
+        {
+            switch (_conjWord)
+            {
+                case "kuru":
+                    _conjWord = "ki";
+                    break;
+                case "suru":
+                    _conjWord = "shi";
+                    break;
+                case "iku":
+                    _conjWord = "iki";
+                    break;
+            }
+        }
+        
+        string ending = "tai";
+
+        if (tenseType == TenseType.Present && positivityType == Positivity.Negative)
+        {
+            ending = "takunai";
+        }
+
+        if (tenseType == TenseType.Past && positivityType == Positivity.Positive)
+        {
+            ending = "takatta";
+        }
+
+        if (tenseType == TenseType.Past && positivityType == Positivity.Negative)
+        {
+            ending = "takunaktta";
+        }
+        
+        _conjWord += ending;
+    }
+
+    private void ConjPotential(bool remixed = false)
+    {
+        string ending = "masu";
+        if (!remixed)
+        {
+            if (!_irregular)
+            {
+                ChangeStem("e");
+                if (EndingType == EndingType.Ichidan)
+                {
+                    _conjWord += "rare";
+                }
+            }
+            else
+            {
+                if (_conjWord == "aru")
+                {
+                    MakeWord(word:WordReader.GetNormWord());
+                    return;
+                }
+                switch (_conjWord)
+                {
+                    case "kuru":
+                        _conjWord = "korare";
+                        break;
+                    case "suru":
+                        _conjWord = "deki";
+                        break;
+                    case "iku":
+                        _conjWord = "ike";
+                        break;
+                }
+            }
+        }
+
+        switch (_combonation)
+        {
+            case Combonation.Polite:
+                ending = "masu";
+                break;
+            case Combonation.PoliteNegative:
+                ending = "masen";
+                break;
+            case Combonation.PolitePast:
+                ending = "mashita";
+                break;
+            case Combonation.PoliteNegativePast:
+                ending = "masendeshita";
+                break;
+            case Combonation.Plain:
+                ending = "ru";
+                break;
+            case Combonation.PlainNegative:
+                ending = "nai";
+                break;
+            case Combonation.PlainPast:
+                ending = "ta";
+                break;
+            case Combonation.PlainNegativePast:
+                ending = "nakatta";
+                break;
+        }
+        _conjWord += ending;
+    }
+
+    private void ConjPassive()
+    {
+        if (!_irregular)
+        {
+            ChangeStem("a");
+            if (EndingType == EndingType.Ichidan)
+            {
+                _conjWord += "rare";
+            }
+            else
+            {
+                _conjWord += "re";
+            }
+        }
+        else
+        {
+            if (_conjWord == "aru")
+            {
+                MakeWord(word:WordReader.GetNormWord());
+                return;
+            }
+            switch (_conjWord)
+            {
+                case "kuru":
+                    _conjWord = "korare";
+                    break;
+                case "suru":
+                    _conjWord = "sare";
+                    break;
+                case "iku":
+                    _conjWord = "ikare";
+                    break;
+            }
+        }
+        ConjPotential(true);
+    }
+
+    private void ConjCausativePas()
+    {
+        if (!_irregular)
+        {
+            ChangeStem("a");
+            if (EndingType == EndingType.Ichidan)
+            {
+                _conjWord += "saserare";
+            }
+            else
+            {
+                _conjWord += "sare";
+            }
+        }
+        else
+        {
+            if (_conjWord == "aru")
+            {
+                MakeWord(word:WordReader.GetNormWord());
+                return;
+            }
+            switch (_conjWord)
+            {
+                case "kuru":
+                    _conjWord = "kosaserare";
+                    break;
+                case "suru":
+                    _conjWord = "saserare";
+                    break;
+                case "iku":
+                    _conjWord = "ikasare";
+                    break;
+            }
+        }
+        ConjPotential(true);
+    }
+
+    private void ConjCausative()
+    {
+        if (!_irregular)
+        {
+            ChangeStem("a");
+            if (EndingType == EndingType.Ichidan)
+            {
+                _conjWord += "sase";
+            }
+            else
+            {
+                _conjWord += "se";
+            }
+        }
+        else
+        {
+            if (_conjWord == "aru")
+            {
+                MakeWord(word:WordReader.GetNormWord());
+                return;
+            }
+            switch (_conjWord)
+            {
+                case "kuru":
+                    _conjWord = "kosase";
+                    break;
+                case "suru":
+                    _conjWord = "sase";
+                    break;
+                case "iku":
+                    _conjWord = "ikase";
+                    break;
+            }
+        }
+        ConjPotential(true);
+    }
+
+    private void ConjConditional()
+    {
+        string ending = "";
+        if (isVerb)
+        {
+            if (!_irregular)
+            {
+                if (EndingType == EndingType.Ichidan)
+                {
+                    if (positivityType == Positivity.Positive)
+                    {
+                        ending = "tara";
+                    }
+                    else
+                    {
+                        ending = "nakattara";
+                    }
+
+                    ChangeStem();
+                    _conjWord += ending;
+                }
+                else
+                {
+                    if (positivityType == Positivity.Positive)
+                    {
+                        switch (VerbEndingType)
+                        {
+                            case VerbEndingType.Uru:
+                            case VerbEndingType.Tsu:
+                                ending = "ttara";
+                                break;
+                            case VerbEndingType.Su:
+                                ending = "shitara";
+                                break;
+                            case VerbEndingType.Ku:
+                                ending = "itara";
+                                break;
+                            case VerbEndingType.Gu:
+                                ending = "idara";
+                                break;
+                            case VerbEndingType.Nubumu:
+                                ending = "ndara";
+                                break;
+                        }
+                        ChangeStem(ending, true);
+                    }
+                    else
+                    {
+                        ChangeStem("a");
+                        _conjWord += "nakattara";
+                    }
+                }
+            }
+            else
+            {
+                if (positivityType == Positivity.Positive)
+                {
+                    switch (_conjWord)
+                    {
+                        case "kuru":
+                            _conjWord = "kitara";
+                            break;
+                        case "suru":
+                            _conjWord = "shitara";
+                            break;
+                        case "iku":
+                            _conjWord = "ittara";
+                            break;
+                        case "aru":
+                            _conjWord = "attara";
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (_conjWord)
+                    {
+                        case "kuru":
+                            _conjWord = "konakattara";
+                            break;
+                        case "suru":
+                            _conjWord = "shinakattara";
+                            break;
+                        case "iku":
+                            _conjWord = "inakattara";
+                            break;
+                        case "aru":
+                            _conjWord = "nakattara";
+                            break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (positivityType == Positivity.Positive)
+            {
+                if (_iAdj)
+                {
+                    IConvert();
+                    _conjWord += "kattara";
+                }
+                else
+                {
+                    _conjWord += "dattara";
+                }
+            }
+            else
+            {
+                if (_iAdj)
+                {
+                    IConvert();
+                    _conjWord += "kunakattara";
+                }
+                else
+                {
+                    _conjWord += "janakattara";
+                }
+            }
+        }
+        
+    }
+
+    private void ConjProvisional()
+    {
+        string ending = "";
+
+        if (isVerb)
+        {
+            if (positivityType == Positivity.Positive)
+            {
+                activePoliteness = false;
+                ending = "reba";
+            }
+            else
+            {
+                if (politenessType == Politeness.Polite)
+                {
+                    ending = "nakereba";
+                }
+                else
+                {
+                    ending = "nakya";
+                }
+            }
+        
+            if (!_irregular)
+            {
+                if (positivityType == Positivity.Positive)
+                {
+                    ChangeStem("e");
+                }
+                else
+                {
+                    ChangeStem("a");
+                }
+            }
+            else
+            {
+                if (positivityType == Positivity.Positive)
+                {
+                    switch (_conjWord)
+                    {
+                        case "kuru":
+                            _conjWord = "ku";
+                            break;
+                        case "suru":
+                            _conjWord = "su";
+                            break;
+                        case "iku":
+                            ending = "keba";
+                            _conjWord = "i";
+                            break;
+                        case "aru":
+                            _conjWord = "a";
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (_conjWord)
+                    {
+                        case "kuru":
+                            _conjWord = "ko";
+                            break;
+                        case "suru":
+                            _conjWord = "shi";
+                            break;
+                        case "iku":
+                            _conjWord = "ika";
+                            break;
+                        case "aru":
+                            _conjWord = "";
+                            break;
+                    }
+                }
+            }
+            _conjWord = ending;
+        }
+        else
+        {
+            activePoliteness = false;
+            if (positivityType == Positivity.Positive)
+            {
+                if (_iAdj)
+                {
+                    IConvert();
+                    _conjWord += "kereba";
+                }
+                else
+                {
+                    _conjWord += "narabe";
+                }
+            }
+            else
+            {
+                if (_iAdj)
+                {
+                    IConvert();
+                    _conjWord += "nakereba";
+                }
+                else
+                {
+                    if (politenessType == Politeness.Plain)
+                    {
+                        activePoliteness = true;
+                        _conjWord += "janakereba";
+                    }
+                    else
+                    {
+                        _conjWord += "denakereba";
+                    }
+                }
+            }
+        }
+    }
+
+    private void ConjImperative()
+    {
+        if (politenessType == Politeness.Polite)
+        {
+            if (!_irregular)
+            {
+                string ending = "nasai";
+                ChangeStem("i");
+                _conjWord += ending;
+            }
+            else
+            {
+                switch (_conjWord)
+                {
+                    case "kuru":
+                        _conjWord = "kinasai";
+                        break;
+                    case "suru":
+                        _conjWord = "shinasai";
+                        break;
+                    case "iku":
+                        _conjWord = "ikinasai";
+                        break;
+                    case "aru":
+                        MakeWord(WordReader.GetNormWord());
+                        return;
+                        break;
+                }
+            }
+        }
+        else
+        {
+            if (!_irregular)
+            {
+                if (EndingType == EndingType.Ichidan)
+                {
+                    ChangeStem();
+                    _conjWord += "ro";
+                }
+                else
+                {
+                    ChangeStem("e");
+                }
+            }
+            else
+            {
+                
+                switch (_conjWord)
+                {
+                    case "kuru":
+                        _conjWord = "koi";
+                        break;
+                    case "suru":
+                        _conjWord = "shiro";
+                        break;
+                    case "iku":
+                        _conjWord = "ike";
+                        break;
+                    case "aru":
+                        MakeWord(WordReader.GetNormWord());
+                        return;
+                        break;
+                }
+            }
+        }
+    }
+
+    private void ConjAdverbal()
+    {
+        if (_iAdj)
+        {
+            IConvert();
+            _conjWord += "ku";
+        }
+        else
+        {
+            _conjWord += "ni";
+        }
+    }
+
+    private void ConjNaru()
+    {
+        if (_iAdj)
+        {
+            IConvert();
+            _conjWord += "kunaru";
+        }
+        else
+        {
+            _conjWord += "ninaru";
+        }
+    }
+
+    private void ConjSuru()
+    {
+        if (_iAdj)
+        {
+            IConvert();
+            _conjWord += "kusuru";
+        }
+        else
+        {
+            _conjWord += "nisuru";
+        }
+    }
+
+    private void ConjSugiru()
+    {
+        if (_iAdj)
+        {
+            IConvert();
+            _conjWord += "sugiru";
+        }
+        else
+        {
+            _conjWord += "sugiru";
+        }
+    }
+    
     public void PrintLine()
     {
         GD.Print($"line is {_line} | conj word is {_conjWord}");

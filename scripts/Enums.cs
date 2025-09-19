@@ -45,6 +45,19 @@
     {
         None,
         Te,
-        TeIru
+        TeIru,
+        Presump,
+        Tai,
+        Potential,
+        Passive,
+        Causative,
+        CausativePas,
+        Conditional,
+        Provisional,
+        Imperative,
+        Adverbal,
+        Naru,
+        Suru,
+        Sugiru
     }
 }

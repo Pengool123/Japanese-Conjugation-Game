@@ -58,14 +58,15 @@ public partial class LvlMenu : Node2D
 		{
 			if (counter <= 20)
 			{
-				currLvlString = "verbLvls/page1/" + counter;
+				currLvlString = "verbLvls/page1/lvlB" + counter;
 			}
 			else
 			{
-				currLvlString = "verbLvls/page2/" + counter;
+				currLvlString = "verbLvls/page2/lvlB" + counter;
 			}
 			
 			UButton lvlButton = GetNodeOrNull<UButton>(currLvlString);
+			GD.Print(lvlButton);
 			if (lvlButton != null)
 			{
 				_lvlButtonsVerbs.Add(lvlButton);
@@ -81,15 +82,10 @@ public partial class LvlMenu : Node2D
 		counter = 1;
 		while (temp)
 		{
-			if (counter <= 20)
-			{
-				currLvlString = "adjLvls/page1/" + counter;
-			}
-			else
-			{
-				currLvlString = "adjLvls/page2/" + counter;
-			}
+			currLvlString = "adjLvls/page1/" + counter;
+			
 			UButton lvlButton = GetNodeOrNull<UButton>(currLvlString);
+			GD.Print(lvlButton);
 			if (lvlButton != null)
 			{
 				_lvlButtonsAdj.Add(lvlButton);
@@ -109,6 +105,7 @@ public partial class LvlMenu : Node2D
 			GD.Print(_maxVerbLvl);
 			if (_maxVerbLvl < counter2)
 			{
+				GD.Print("cannot activate verb" + counter2);
 				lvlButton.Active = false;
 			}
 			counter++;
@@ -122,6 +119,7 @@ public partial class LvlMenu : Node2D
 			GD.Print(_maxAdjLvl);
 			if (_maxAdjLvl < counter2)
 			{
+				GD.Print("cannot activate adj" + counter2);
 				lvlButton.Active = false;
 			}
 			counter++;

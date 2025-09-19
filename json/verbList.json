@@ -59,11 +59,25 @@
   "IAdj": [
 	"いい{good}",
 	"悪[わる]い{bad}",
+	"大[おお]きい{big/large}",
+	"小[ちい]さい{small/little}",
+	"新[あたら]しい{new}",
+	"古[ふる]い{old (not for people)}",
+	"長[なが]い{long}",
+	"短[みじか]い{short}",
 	"高[たか]い{high/expensive}",
-	"危[あぶ]ない{dangerous}"
+	"安[やす]い{cheap/inexpensive}"
   ],
   "NaAdj": [
 	"上[じょう]手[ず]{skillful/good (at)}",
-	"元[げん]気[き]{lively/healthy}"
+	"元[げん]気[き]{lively/healthy}",
+	"有[ゆう]名[めい]{famous}",
+	"静[しず]か{quiet}",
+	"大[たい]切[せつ]{important/precious}",
+	"親[しん]切[せつ]{kind/friendly}",
+	"便[べん]利[り]{convenient/useful}",
+	"嫌[きら]い{disliked/hated}",
+	"好[す]き{liked/favorite}",
+	"安[あん]全[ぜん]{safe}"
   ]
 }

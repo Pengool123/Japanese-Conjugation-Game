@@ -51,6 +51,17 @@ public class WordReader
 		}
 	}
 
+	public static Word GetNormWord()
+	{
+		Word newWord = new Word();
+		Random random = new Random();
+		if (Config.isVerb)
+		{
+			newWord = new Word(_json.Godan[random.Next(0, _json.Godan.Count - 1)], type: EndingType.Godan, isVerb:true);
+		}
+		return newWord;
+	}
+
 	public static List<Word> GetWords(int length = 7, bool mix = false)
 	{
 		int len = length >= 7 ? length : 7;

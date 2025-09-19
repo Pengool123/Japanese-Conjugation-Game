@@ -196,7 +196,7 @@ texture = ExtResource("5_txm1s")
 
 [node name="timerBox" type="Sprite2D" parent="."]
 position = Vector2(780, 557)
-scale = Vector2(1.17292, 0.0283251)
+scale = Vector2(1.17351, 0.028)
 texture = ExtResource("5_txm1s")
 centered = false
 

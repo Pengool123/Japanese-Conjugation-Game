@@ -30,6 +30,7 @@ public partial class Lvl : Node2D
 	private AudioStreamPlayer _incorrectsfx;
 	
 	private float _totalTime;
+	private float _tempTimerHolder;
 	private byte _life;
 	private bool _passed;
 	private bool _timeStatus;
@@ -54,6 +55,7 @@ public partial class Lvl : Node2D
 		_timerBox = GetNode<Sprite2D>("timerBox");
 		_timer = GetNode<Timer>("Timer");
 		_totalTime = Config.GetTimerLen();
+		_tempTimerHolder = _totalTime;
 		_timer.SetWaitTime(_totalTime);
 		_timeStatus = Config.getTimerStatus();
 		_wasRight = true;
@@ -127,7 +129,120 @@ public partial class Lvl : Node2D
 				case 6:
 					_conjType.Add(ConjType.Te);
 					break;
-				default:
+				case 7:
+					_conjType.Add(ConjType.Te);
+					_positivity = Positivity.Negative;
+					break;
+				case 8:
+					_tense = TenseType.Past;
+					break;
+				case 9:
+					_tense = TenseType.Past;
+					_positivity = Positivity.Negative;
+					break;
+				case 10:
+					_tense = TenseType.Past;
+					_politeness = Politeness.Plain;
+					break;
+				case 11:
+					_tense = TenseType.Past;
+					_positivity = Positivity.Negative;
+					break;
+				case 12:
+					_tense = TenseType.Past;
+					_politeness = Politeness.Both;
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Te);
+					_conjType.Add(ConjType.None);
+					_wordCount = 10;
+					_totalTime += 5;
+					break;
+				case 13:
+					_tense = TenseType.Both;
+					_politeness = Politeness.Both;
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.TeIru);
+					_wordCount = 15;
+					_totalTime += 5;
+					break;
+				case 14:
+					_politeness =  Politeness.Both;
+					_conjType.Add(ConjType.Presump);
+					_wordCount = 15;
+					break;
+				case 15:
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Tai);
+					_wordCount = 15;
+					break;
+				case 16:
+					_tense = TenseType.Past;
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Tai);
+					break;
+				case 17:
+					_politeness = Politeness.Both;
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Passive);
+					_wordCount = 15;
+					break;
+				case 18:
+					_tense = TenseType.Past;
+					_politeness = Politeness.Both;
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Passive);
+					_wordCount = 15;
+					break;
+				case 19:
+					_tense = TenseType.Both;
+					_politeness = Politeness.Both;
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Passive);
+					_conjType.Add(ConjType.TeIru);
+					_conjType.Add(ConjType.Presump);
+					_conjType.Add(ConjType.Tai);
+					_totalTime += 10;
+					break;
+				case 20:
+					_tense = TenseType.Both;
+					_politeness = Politeness.Both;
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Passive);
+					_wordCount = 15;
+					break;
+				case 21:
+					_tense = TenseType.Both;
+					_politeness = Politeness.Both;
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Causative);
+					_wordCount = 15;
+					break;
+				case 22:
+					_tense = TenseType.Both;
+					_politeness = Politeness.Both;
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.CausativePas);
+					_wordCount = 15;
+					break;
+				case 23:
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Conditional);
+					break;
+				case 24:
+					_positivity = Positivity.Both;
+					_politeness = Politeness.Both;
+					_conjType.Add(ConjType.Provisional);
+					_wordCount = 15;
+					break;
+				case 25:
+					_tense = TenseType.Both;
+					_politeness = Politeness.Both;
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Provisional);
+					_conjType.Add(ConjType.CausativePas);
+					_conjType.Add(ConjType.Conditional);
+					_conjType.Add(ConjType.Causative);
+					_conjType.Add(ConjType.Passive);
 					break;
 			}
 		}
@@ -136,6 +251,88 @@ public partial class Lvl : Node2D
 			switch (currLvl)
 			{
 				default:
+					break;
+				case 2:
+					_politeness = Politeness.Polite;
+					break;
+				case 3:
+					_politeness = Politeness.Polite;
+					_positivity = Positivity.Negative;
+					break;
+				case 4:
+					_positivity = Positivity.Negative;
+					break;
+				case 5:
+					_positivity = Positivity.Both;
+					_politeness = Politeness.Both;
+					_wordCount = 15;
+					break;
+				case 6:
+					_conjType.Add(ConjType.Te);
+					break;
+				case 7:
+					_conjType.Add(ConjType.Te);
+					_positivity = Positivity.Negative;
+					break;
+				case 8:
+					_tense = TenseType.Past;
+					break;
+				case 9:
+					_tense = TenseType.Past;
+					_positivity = Positivity.Negative;
+					break;
+				case 10:
+					_tense = TenseType.Past;
+					_politeness = Politeness.Plain;
+					break;
+				case 11:
+					_tense = TenseType.Past;
+					_positivity = Positivity.Negative;
+					break;
+				case 12:
+					_tense = TenseType.Past;
+					_politeness = Politeness.Both;
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Te);
+					_conjType.Add(ConjType.None);
+					_wordCount = 10;
+					_totalTime += 5;
+					break;
+				case 13:
+					_conjType.Add(ConjType.Adverbal);
+					break;
+				case 14:
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Conditional);
+					_wordCount = 15;
+					break;
+				case 15:
+					_politeness = Politeness.Both;
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Provisional);
+					_wordCount = 15;
+					break;
+				case 16:
+					_politeness = Politeness.Both;
+					_positivity = Positivity.Both;
+					_conjType.Add(ConjType.Provisional);
+					_conjType.Add(ConjType.Conditional);
+					_conjType.Add(ConjType.Adverbal);
+					_wordCount = 10;
+					break;
+				case 17:
+					_conjType.Add(ConjType.Naru);
+					break;
+				case 18:
+					_conjType.Add(ConjType.Suru);
+					break;
+				case 19:
+					_conjType.Add(ConjType.Sugiru);
+					break;
+				case 20:
+					_conjType.Add(ConjType.Sugiru);
+					_conjType.Add(ConjType.Suru);
+					_conjType.Add(ConjType.Naru);
 					break;
 			}
 		}
@@ -165,6 +362,7 @@ public partial class Lvl : Node2D
 		UpdateTags();
 		if (_timeStatus)
 		{
+			_tempTimerHolder = _totalTime;
 			_timer.Start();
 		}
 	}
@@ -180,7 +378,7 @@ public partial class Lvl : Node2D
 	
 	private void UpdateTimerBox()
 	{
-		_timerBox.Scale = new Vector2( (float)(_timer.TimeLeft/_totalTime), 0.028f);
+		_timerBox.Scale = new Vector2( (float)(1.174*(_timer.TimeLeft/_totalTime)), 0.028f);
 		
 		if (_wasRight)
 		{
@@ -214,31 +412,37 @@ public partial class Lvl : Node2D
 			node.Visible = false;
 		}
 		_tagBoxes.Clear();
+
 		//politeness
-		Sprite2D politenessBox = (Sprite2D)_tagBox.Duplicate((int)(Node.DuplicateFlags.UseInstantiation));
-		_tagBox.GetParent().AddChild(politenessBox);
-		_tagBoxes.Add(politenessBox);
-		politenessBox.GetNode<RichTextLabel>("type").Text =
-			_ConjList[0].politenessType == Politeness.Polite ? "Polite" : "Plain";
-		politenessBox.Visible = true;
-		
+		if (_ConjList[0].activePoliteness)
+		{
+			Sprite2D politenessBox = (Sprite2D)_tagBox.Duplicate((int)(Node.DuplicateFlags.UseInstantiation));
+			_tagBox.GetParent().AddChild(politenessBox);
+			_tagBoxes.Add(politenessBox);
+			politenessBox.GetNode<RichTextLabel>("type").Text =
+				_ConjList[0].politenessType == Politeness.Polite ? "Polite" : "Plain";
+			politenessBox.Visible = true;
+		}
+	
 		//do not show if it's present
-		if (_ConjList[0].tenseType != TenseType.Present)
+		if (_ConjList[0].activeTense && _ConjList[0].tenseType == TenseType.Past)
 		{
 			Sprite2D tenseBox = (Sprite2D)_tagBox.Duplicate((int)(Node.DuplicateFlags.UseInstantiation));
 			_tagBox.GetParent().AddChild(tenseBox);
 			_tagBoxes.Add(tenseBox);
 			tenseBox.GetNode<RichTextLabel>("type").Text = "Past";
 		}
-		
+	
 		//do not show if it's positive
-		if (_ConjList[0].positivityType != Positivity.Positive)
+		if (_ConjList[0].activePositivity && _ConjList[0].positivityType == Positivity.Negative)
 		{
 			Sprite2D positiveBox = (Sprite2D)_tagBox.Duplicate((int)(Node.DuplicateFlags.UseInstantiation));
 			_tagBox.GetParent().AddChild(positiveBox);
 			_tagBoxes.Add(positiveBox);
 			positiveBox.GetNode<RichTextLabel>("type").Text = "Negative";
 		}
+		
+		
 
 		//only show if the type isn't none
 		if (_ConjList[0]._conjType != ConjType.None)
@@ -248,6 +452,7 @@ public partial class Lvl : Node2D
 			_tagBoxes.Add(conjType);
 			string text = "";
 			
+			//form name
 			switch (_ConjList[0]._conjType)
 			{
 				case ConjType.Te:
@@ -261,7 +466,7 @@ public partial class Lvl : Node2D
 		switch (_tagBoxes.Count)
 		{
 			case 1:
-				_tagBoxes[0].Position = new Vector2(1280, 355);
+				_tagBoxes[0].Position = new Vector2(1280, 387);
 				break;
 			case 2: 
 				_tagBoxes[0].Position = new Vector2(1280, 355);
@@ -425,7 +630,7 @@ public partial class Lvl : Node2D
 				if (_timeStatus)
 				{
 					//in case it was inc by prev answer being wrong
-					_totalTime =  Config.GetTimerLen();
+					_totalTime = _tempTimerHolder;
 					_timer.Start(_totalTime);
 				}
 			}

@@ -15,6 +15,7 @@ public class OnScreenJPText
     {
         _labels = new List<Label>();
         string noFuri = word.noFurigana;
+        
         string fullWord = word.wordLine;
         int length = noFuri.Length;
         //go to the top left of the string for furigana text
