@@ -7,9 +7,6 @@ The whole game is basiclly a typing game.
 
 # To-Do List:
 <ul>
-  <li>Add more verb conjugations</li>
-  <li><s>Add a 2nd page for adjectives</s></li>
-  <li>Clean up the code</li>
-  <li><s>Add sfx + </s>effects</li>
+  <li>Finish button making (making the buttons have pictures / conjugation pattern)</li>
   <li>Make it an .exe and upload it to itch.io</li>
 </ul>
