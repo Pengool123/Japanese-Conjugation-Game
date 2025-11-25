@@ -34,7 +34,6 @@ public partial class LvlMenu : Node2D
 		_pages.Add(GetNode<Control>("verbLvls/page1"));
 		_pages.Add(GetNode<Control>("verbLvls/page2"));
 		_pages.Add(GetNode<Control>("adjLvls/page1"));
-		_pages.Add(GetNode<Control>("adjLvls/page2"));
 
 		_backButton.Pressed += OnBackPressed;
 		_optionsButton.Pressed += OnOptionsPressed;

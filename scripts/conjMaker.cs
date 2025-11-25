@@ -278,6 +278,11 @@ public partial class conjMaker : Label
     private void ChangeStem(string stem = "i", bool special = false)
     {
         byte cutOff = 1;
+        if (stem == "a" && VerbEndingType == VerbEndingType.Uru && _conjWord[_conjWord.Length - 2] != 'r')
+        {
+            _conjWord = _conjWord.Substring(0, _conjWord.Length - 1) + "wa";
+            return;
+        }
         if (EndingType == EndingType.Godan || EndingType == EndingType.IrregularGodan)
         {
             if (special) cutOff = (byte)(VerbEndingType == VerbEndingType.Tsu ? 3 : 2);
