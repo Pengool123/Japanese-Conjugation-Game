@@ -1,12 +1,24 @@
 # Japanese-Conjugation-Game
-# This is purely the skeleton / proof of concept
+## The graphics are somehat missing, but the game works fully
 
-# What is this?
-A typing game that hopefully helps people learn how to conjugate verbs (and soon to be adjectives) in different forms.<br/>
-The whole game is basiclly a typing game.
+# Basics
+## Main Menu
+![Main Menu](gitImg/menu.png)
+- Settings to change how long you can spend per word
+- Include uncommon irregular godan verbs
 
-# To-Do List:
-<ul>
-  <li>Finish button making (making the buttons have pictures / conjugation pattern)</li>
-  <li>Make it an .exe and upload it to itch.io</li>
-</ul>
+## Level Menu
+![Lvl menu](gitImg/lvlMenu.png)
+- Level unlock once the previous level is cleared<br>
+- In the order of Genki 5 + 4 and other Japanese grammar books
+- More verb conjugations and adjective conjugations on pages 2 + 3
+
+## Level
+![lvl stuff](gitImg/lvl.png)
+Type the word and the conjugations it wants
+![lvl wrong](gitImg/wrongAns.png)
+Typing incorrectly leads
+- -1 life
+- +5 seconds on the next word
+- Puts it at the end of the list of the level
+- Shows the correct spelling
