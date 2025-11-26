@@ -1,5 +1,4 @@
 # Japanese-Conjugation-Game
-## The graphics are somehat missing, but the game works fully
 
 # Basics
 ## Main Menu
